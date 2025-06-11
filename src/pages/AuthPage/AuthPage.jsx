@@ -51,7 +51,6 @@ const AuthPage = () => {
 
 
         try {
-            console.log('Dados enviados:', data);
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
@@ -79,8 +78,12 @@ const AuthPage = () => {
                     navigate('/dashboard');
                 }
             } else {
-                console.error('Erro:', result.message);
-                alert(`Erro: ${result.message || 'Ocorreu um erro ao processar sua solicitação.'}`);
+                if (response.status >= 400 && response.status < 500) {
+                    alert(`Erro: ${result.message || 'Verifique os dados informados.'}`);
+                } else {
+                    console.error('Erro no servidor:', result.message);
+                    alert('Erro no servidor. Tente novamente mais tarde.');
+                }
             }
         } catch (error) {
             console.error('Erro na requisição:', error);
