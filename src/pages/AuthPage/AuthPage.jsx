@@ -72,6 +72,7 @@ const AuthPage = () => {
                     setAction('Login');
                 } else {
                     alert('Login realizado com sucesso!');
+                    localStorage.setItem('id', result.user.id)
                     localStorage.setItem('userName', result.user.name);
                     localStorage.setItem('userRole', result.user.role);
                     sessionStorage.setItem('accessToken', result.accessToken);
