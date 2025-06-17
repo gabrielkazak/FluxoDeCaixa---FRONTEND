@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import AuthPage from './pages/AuthPage/AuthPage';
 import ForgotPasswordPage from './pages/RecPasswordPage/RecPasswordPage';
 import HomePage from './pages/HomePage/HomePage';
+import FlowPage from './pages/FlowPage/FlowPage';
 
 const App = () => {
 
@@ -17,14 +18,12 @@ const App = () => {
                 {/* Rota para Login/Registro */}
                 <Route path="/login" element={<AuthPage />} />
 
-                {/* Rota para Recuperação de Senha */}
                 {/* Esta rota vai lidar com /forgot-password e /forgot-password?token=XYZ */}
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           
-                <Route
-                    path="/dashboard"
-                    element={isAuthenticated ? <HomePage /> : <Navigate to="/login" replace />}
-                />
+                <Route path="/dashboard" element={isAuthenticated ? <HomePage /> : <Navigate to="/login" replace />} />
+                
+                <Route path="/flowPage" element={<FlowPage />} />
 
                 {/* Redireciona a rota raiz para /login */}
                 <Route path="/" element={<Navigate to="/login" replace />} />
