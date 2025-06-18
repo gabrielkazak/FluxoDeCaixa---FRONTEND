@@ -7,6 +7,7 @@ import AuthPage from './pages/AuthPage/AuthPage';
 import ForgotPasswordPage from './pages/RecPasswordPage/RecPasswordPage';
 import HomePage from './pages/HomePage/HomePage';
 import FlowPage from './pages/FlowPage/FlowPage';
+import FlowCrudPage from './pages/FlowCrudPage/FlowCrudPage';
 
 const App = () => {
 
@@ -24,6 +25,8 @@ const App = () => {
                 <Route path="/dashboard" element={isAuthenticated ? <HomePage /> : <Navigate to="/login" replace />} />
                 
                 <Route path="/flowPage" element={<FlowPage />} />
+
+                <Route path="/allFlows" element={<FlowCrudPage />} />
 
                 {/* Redireciona a rota raiz para /login */}
                 <Route path="/" element={<Navigate to="/login" replace />} />

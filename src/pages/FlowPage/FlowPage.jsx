@@ -13,6 +13,35 @@ const FlowPage = () => {
     const [valor, setValor] = useState('');
     const [formaPagamento, setFormaPagamento] = useState('');
     const [descricao, setDescricao] = useState('');
+    const [balance, setBalance] = useState('')
+
+   const fetchBalance = async () => {
+        try {
+            const accessToken = sessionStorage.getItem('accessToken');
+
+            const balanceAPI = await fetch('/api/balance', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
+            });
+            if (!balanceAPI.ok) {
+                const errorData = await balanceAPI.json();
+                throw new Error(errorData.message || 'Erro ao buscar saldo');
+            }
+
+            const data = await balanceAPI.json();
+            setBalance(data);
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
+    };
+
+    // roda ao carregar a página
+    useEffect(() => {
+        fetchBalance();
+    }, []);
 
     useEffect(() => {
         const storedID = localStorage.getItem('id')
@@ -61,6 +90,7 @@ const FlowPage = () => {
             setValor('');
             setFormaPagamento('');
             setDescricao('');
+            await fetchBalance();
 
         } catch (error) {
             console.error('Erro na requisição:', error);
@@ -73,9 +103,11 @@ const FlowPage = () => {
             <div className="d-flex flex-column min-vh-100 bg-light">
                 <header className="navbar navbar-expand-lg navbar-dark bg-success shadow-sm p-3">
                     <div className="container-fluid">
-                        <h1 className="navbar-brand mb-0 h1 fs-2">Meu Dashboard</h1>
+                       <button className="btn btn-success btn-lg border">
+                            <a className="btn-flowPage" href="/allFlows">Ver Movimentações</a>
+                        </button>
                         <button className="btn btn-success btn-lg border">
-                            <a className="btn-flowPage" href="/dashboard">Movimentações</a>
+                            <a className="btn-flowPage" href="/dashboard">Voltar a Dashboard</a>
                         </button>
                         <button className="btn btn-danger btn-lg">
                             Deslogar
@@ -85,10 +117,16 @@ const FlowPage = () => {
 
                 <main className="flex-grow-1 p-3 p-md-4">
                     <div className="container-fluid py-4 bg-white rounded shadow-sm">
-                        <h2 className="text-center text-success mb-4 display-6">Bem-vindo(a) a aba de movimentação</h2>
-                        <p className="lead text-center mb-4">
-                            Aqui você pode gerar Movimentações de Caixa
-                        </p>
+                      <h2 className="text-center text-success mb-4 display-6">Bem-vindo(a) a aba de movimentação</h2>
+                      {balance && 
+                          <>
+                          <div className='d-flex justify-content-between'>
+                            <p className="lead text-center mb-4">Saldo na conta <strong>R${balance.saldoConta}</strong></p>
+                              <p className="lead text-center mb-4">Saldo no caixa <strong>R${balance.saldoCaixa}</strong></p>
+                            </div>
+                          </>
+                      }
+                        
 
                         <div className="row g-4">
                             <div className="col-12 text-center">
