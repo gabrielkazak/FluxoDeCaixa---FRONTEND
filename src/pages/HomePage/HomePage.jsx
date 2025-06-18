@@ -152,7 +152,7 @@ const HomePage = () => {
                 <div className="container-fluid">
                     <h1 className="navbar-brand mb-0 h1 fs-2">Meu Dashboard</h1>
                     <button
-                        className="btn btn-success btn-lg border"><Link className='btn-flowPage' to='/flowPage'>Movimentações</Link></button>
+                        className="btn btn-success btn-lg border"><Link className='btn-flowPage' to='/flowPage'>Fazer Movimentação</Link></button>
                     <button
                         className="btn btn-danger btn-lg"
                         onClick={handleLogout}
