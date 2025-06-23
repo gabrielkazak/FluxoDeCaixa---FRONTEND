@@ -1,15 +1,50 @@
+# Sistema de Fluxo de Caixa (Frontend)
 
-# React + Vite
+## Descrição
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Parte frontend do sistema de fluxo de caixa para uma pequena empresa. Esta interface exibe as movimentações financeiras e as funções dos funcionários dentro do sistema.
 
-Currently, two official plugins are available:
+## Tecnologias Utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React (inicializado com Vite)
+- Bootstrap
+- Comunicação com backend via `fetch`
 
-## Expanding the ESLint configuration
+## Funcionalidades
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# FluxoDeCaixa---FRONTEND
+- Login
+- Registro de usuários (feito apenas por administradores)
+- Movimentações financeiras
+- Recuperação de senha via email
+
+## Pré-requisitos
+
+- Node.js instalado
+
+## Instalação
+
+Clone o repositório via git:
+```bash
+   git clone <https://github.com/gabrielkazak/FluxoDeCaixa---FRONTEND>
+
+   cd fluxoCaixa
+
+   npm install
+```
+
+## Execução
+
+Para rodar o frontend em modo de desenvolvimento:
+
+```bash
+npm run dev
+```
+
+## Repositório do Backend
+
+https://github.com/gabrielkazak/FluxoDeCaixa---BACKEND
+
+## Desenvolvedores
+
+- Arthur dos Reis  
+- Gabriel Kazakevicius
