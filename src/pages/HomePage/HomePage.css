@@ -2,3 +2,12 @@
     text-decoration: none !important;
     color: white !important;
 }
+
+.navbar{
+    background-color: #014F91 !important;
+}
+
+.logo{
+    width: 120px;
+    height: 120px;
+}

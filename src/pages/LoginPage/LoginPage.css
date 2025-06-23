@@ -22,8 +22,12 @@
     font-size: 19px;
 }
 
+.inputs{
+    padding: 1rem;
+}
+
 .forgot-password span{
-    color: #005506;
+    color:  #014F91;
     cursor: pointer;
 }
 
@@ -38,6 +42,7 @@
     font-size: 19px;
     font-weight: 700;
     cursor: pointer;
+    background-color: #014F91 !important;
 }
 
 .gray{
@@ -58,4 +63,11 @@ select {
     font-size: 19px;
     cursor: pointer;
     padding: 10px;
+}
+
+.corpo{
+    height: 100vh !important;
+    display: flex;
+    align-items: center;
+    justify-content: center ;
 }
