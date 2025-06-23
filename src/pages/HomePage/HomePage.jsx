@@ -1,6 +1,7 @@
 // pages/HomePage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import logo from '../../Components/assets/logo.png'
 import './HomePage.css';
 
 const HomePage = () => {
@@ -19,7 +20,7 @@ const HomePage = () => {
     useEffect(() => {
         const storedName = localStorage.getItem('userName');
         const storedRole = localStorage.getItem('userRole');
-        const storedAccessToken = sessionStorage.getItem('accessToken');
+        const storedAccessToken = localStorage.getItem('accessToken');
 
         if (storedName && storedRole && storedAccessToken) {
             setUserName(storedName);
@@ -32,7 +33,7 @@ const HomePage = () => {
     const handleLogout = useCallback(async () => {
         localStorage.removeItem('userName');
         localStorage.removeItem('userRole');
-        sessionStorage.removeItem('accessToken');
+        localStorage.removeItem('accessToken');
         localStorage.removeItem('id');
 
         try {
@@ -59,9 +60,10 @@ const HomePage = () => {
     }, [navigate]);
 
     const handleFetchUsers = useCallback(async () => {
+        if(userRole != 'admin') return
         setLoadingUsers(true);
         setErrorUsers(null);
-        const accessToken = sessionStorage.getItem('accessToken');
+        const accessToken = localStorage.getItem('accessToken');
 
         if (!accessToken) {
             navigate('/login');
@@ -94,12 +96,12 @@ const HomePage = () => {
         } finally {
             setLoadingUsers(false);
         }
-    }, [navigate, handleLogout]);
+    }, [navigate, handleLogout, userRole]);
 
     const handleFetchFlows = useCallback(async () => {
         setLoadingFlows(true);
         setErrorFlows(null);
-        const accessToken = sessionStorage.getItem('accessToken');
+        const accessToken = localStorage.getItem('accessToken');
 
         if (!accessToken) {
             navigate('/login');
@@ -135,6 +137,40 @@ const HomePage = () => {
         }
     }, [navigate, handleLogout]);
 
+    const handleDeleteUser = useCallback(async (id) => {
+        if (!window.confirm("Tem certeza que deseja excluir este usuário?")) return;
+
+        const accessToken = localStorage.getItem('accessToken');
+
+        try {
+            const response = await fetch(`/api/users/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+
+            if (response.ok) {
+                alert("Usuário deletado com sucesso.");
+                handleFetchUsers();
+            } else {
+                const errorData = await response.json();
+                alert(`Erro: ${errorData.message || 'Erro ao deletar usuário.'}`);
+            }
+        } catch (error) {
+            console.error('Erro ao deletar usuário:', error);
+            alert('Erro ao deletar usuário');
+        }
+    }, [handleFetchUsers]);
+
+    const handleEdit = (user) => {
+        localStorage.setItem('editUser', JSON.stringify(user));
+        navigate('/updateUser');
+    };
+
+
+
     useEffect(() => {
         if (userRole === 'admin') {
             handleFetchUsers();
@@ -145,16 +181,20 @@ const HomePage = () => {
         handleFetchFlows();
     }, [handleFetchFlows])
 
+    console.log(userRole)
+
 
     return (
-        <div className="d-flex flex-column min-vh-100 bg-light">
-            <header className="navbar navbar-expand-lg navbar-dark bg-success shadow-sm p-3">
-                <div className="container-fluid">
-                    <h1 className="navbar-brand mb-0 h1 fs-2">Meu Dashboard</h1>
+        <div className="min-vw-75 d-flex flex-column bg-light">
+            <header className="navbar navbar-expand-lg navbar-dark shadow-sm p-3">
+                <div className="container-fluid d-flex flex-column flex-md-row justify-content-center align-items-center justify-content-md-around align-items-center">
+                    <img className='logo' src={logo} alt="" />
                     <button
-                        className="btn btn-success btn-lg border"><Link className='btn-flowPage' to='/flowPage'>Fazer Movimentação</Link></button>
+                        className="btn btn-primary btn-lg border"><Link className='btn-flowPage' to='/flowPage'>Fazer Movimentação</Link></button>
                     <button
-                        className="btn btn-danger btn-lg"
+                        className="btn btn-primary btn-lg border"><Link className='btn-flowPage' to='/register'>Criar Usuário</Link></button>
+                    <button
+                        className="btn btn-danger btn-lg my-3"
                         onClick={handleLogout}
                     >
                         Deslogar
@@ -164,7 +204,7 @@ const HomePage = () => {
 
             <main className="flex-grow-1 p-3 p-md-4">
                 <div className="container-fluid py-4 bg-white rounded shadow-sm">
-                    <h2 className="text-center text-success mb-4 display-6">Bem-vindo(a) ao seu Dashboard {userName}!</h2>
+                    <h2 className="text-center fw-bold mb-4 display-6">Bem-vindo(a) ao seu Dashboard {userName}!</h2>
                     <p className="lead text-center mb-4">
                         Aqui você pode ver informações importantes e acessar as funcionalidades do sistema.
                         {userRole && <br />}
@@ -172,11 +212,11 @@ const HomePage = () => {
 
                     <div className="row g-4">
                         <div className="col-12 col-md-6 col-lg-5">
-                            <div className="card h-100 border-success shadow-sm">
+                            <div className="card h-100 border-primary shadow-sm">
                                 <div className="card-body bg-light-green-subtle">
-                                    <h3 className="card-title text-success mb-3">Visão Geral</h3>
+                                    <h3 className="card-title text-primary mb-3">Visão Geral</h3>
                                     <p className="card-text">Você está logado como {userRole || 'usuário padrão'}.</p>
-                                    <h3 className="card-title text-success mb-3">Ultimas 5 Movimentações</h3>
+                                    <h3 className="card-title text-primary mb-3">Ultimas 5 Movimentações</h3>
                                     {flows && (
                                         flows.length > 0 ? (
                                             <ul className="list-group list-group-flush">
@@ -207,10 +247,26 @@ const HomePage = () => {
                                         users.length > 0 ? (
                                             <ul className="list-group list-group-flush">
                                                 {users.map((user) => (
-                                                    <li key={user.id} className="list-group-item">
+                                                    <li key={user.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                                        <div>
                                                         <strong>{user.name}</strong> - {user.email} ({user.role})
+                                                        </div>
+                                                        <div className="d-flex gap-2">
+                                                        <button 
+                                                            className="btn btn-secondary btn-sm"
+                                                            onClick={() => handleEdit(user)}
+                                                        >
+                                                            ✏️ Editar
+                                                        </button>
+                                                        <button 
+                                                            className="btn btn-danger btn-sm"
+                                                            onClick={() => handleDeleteUser(user.id)}
+                                                        >
+                                                            🗑 Excluir
+                                                        </button>
+                                                        </div>
                                                     </li>
-                                                ))}
+                                                    ))}
                                             </ul>
                                         ) : (
                                             !loadingUsers && !errorUsers && <p className="text-center">Nenhum usuário cadastrado encontrado.</p>
@@ -230,10 +286,6 @@ const HomePage = () => {
                     </div>
                 </div>
             </main>
-
-            <footer className="bg-dark text-white text-center py-3 shadow-top">
-                <p className="mb-0">&copy; 2025 Meu App. Todos os direitos reservados.</p>
-            </footer>
         </div>
     );
 };

@@ -105,89 +105,91 @@ const RecPasswordPage = () => {
     };
 
     return (
-        <div className='container rec-pass d-flex flex-column bg-light justify-content-center align-items-center rounded text-center'>
-            <div className='header d-flex flex-column justify-content-center align-items-center w-auto my-3'>
-                <div className='text fs-3 fw-bold'>Recuperação de Senha</div>
-                <div className='underline w-100 bg-success rounded'></div>
-            </div>
+        <div className="corpo">
+            <div className='container rec-pass d-flex flex-column bg-light justify-content-center align-items-center rounded text-center'>
+                <div className='header d-flex flex-column justify-content-center align-items-center w-auto my-3'>
+                    <div className='text fs-3 fw-bold'>Recuperação de Senha</div>
+                    <div className='underline w-100 bg-primary rounded'></div>
+                </div>
 
-            {feedbackMessage && <p className="feedback-message">{feedbackMessage}</p>}
+                {feedbackMessage && <p className="feedback-message">{feedbackMessage}</p>}
 
-            {action === 'sendEmail' && (
-                <>
-                    <div className='action-text fs-5'>
-                        Digite seu e-mail para receber um link de redefinição de senha.
-                    </div>
-                    <div className='inputs d-flex flex-column my-3 rounded w-75'>
-                        <div className='input d-flex align-items-center m-auto rounded w-100 px-2'>
-                            <img src={emailIcon} alt='Ícone de e-mail' style={{ width: '24px', marginRight: '10px' }}/>
-                            <input
-                                className='form-control w-100'
-                                type='email'
-                                placeholder='Email'
-                                value={emailTxt}
-                                onChange={(e) => setEmailTxt(e.target.value)}
-                            />
+                {action === 'sendEmail' && (
+                    <>
+                        <div className='action-text fs-5'>
+                            Digite seu e-mail para receber um link de redefinição de senha.
                         </div>
-                    </div>
-                    <div className='submit-container'>
-                        <div className='submit' onClick={handleSubmitSendEmail}>
-                            Enviar Email de Redefinição
+                        <div className='inputs d-flex flex-column my-3 rounded w-75'>
+                            <div className='input d-flex align-items-center m-auto rounded w-100 px-2'>
+                                <img src={emailIcon} alt='Ícone de e-mail' style={{ width: '24px', marginRight: '10px' }}/>
+                                <input
+                                    className='form-control w-100'
+                                    type='email'
+                                    placeholder='Email'
+                                    value={emailTxt}
+                                    onChange={(e) => setEmailTxt(e.target.value)}
+                                />
+                            </div>
                         </div>
-                    </div>
-                </>
-            )}
+                        <div className='submit-container'>
+                            <div className='submit' onClick={handleSubmitSendEmail}>
+                                Enviar Email de Redefinição
+                            </div>
+                        </div>
+                    </>
+                )}
 
-            {action === 'emailSent' && (
-                <>
-                    <div className='action-text fs-5'>
-                        Um e-mail foi enviado para você com instruções para redefinir sua senha.
-                        Caso não apareça na sua caixa de entrada, verifique a pasta de spam.
-                        <br /><br />
-                        Se você não receber o e-mail dentro de 15 minutos,
-                        <span onClick={() => {
-                            setAction('sendEmail');
-                            setFeedbackMessage('');
-                        }} className="try-again-link text-success"> clique aqui</span> para tentar novamente.
-                    </div>
-                </>
-            )}
+                {action === 'emailSent' && (
+                    <>
+                        <div className='action-text fs-5'>
+                            Um e-mail foi enviado para você com instruções para redefinir sua senha.
+                            Caso não apareça na sua caixa de entrada, verifique a pasta de spam.
+                            <br /><br />
+                            Se você não receber o e-mail dentro de 15 minutos,
+                            <span onClick={() => {
+                                setAction('sendEmail');
+                                setFeedbackMessage('');
+                            }} className="try-again-link text-primary"> clique aqui</span> para tentar novamente.
+                        </div>
+                    </>
+                )}
 
-            {action === 'changePassword' && (
-                // --- UI para MUDAR A SENHA (com token) ---
-                <>
-                    <div className='inputs gap-3 d-flex flex-column my-3 rounded w-75'>
-                        <div className='input d-flex align-items-center m-auto rounded w-100 px-2'>
-                            <img src={passwordIcon} alt='Ícone de nova senha' />
-                            <input
-                                className='confirm-password form-control w-100'
-                                type='password'
-                                placeholder='Nova Senha'
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                            />
+                {action === 'changePassword' && (
+                    // --- UI para MUDAR A SENHA (com token) ---
+                    <>
+                        <div className='inputs gap-3 d-flex flex-column my-3 rounded w-75'>
+                            <div className='input d-flex align-items-center m-auto rounded w-100 px-2'>
+                                <img src={passwordIcon} alt='Ícone de nova senha' />
+                                <input
+                                    className='confirm-password form-control w-100'
+                                    type='password'
+                                    placeholder='Nova Senha'
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                />
+                            </div>
+                            <div className='input d-flex align-items-center m-auto rounded w-100 px-2'>
+                                <img src={passwordIcon} alt='Ícone de confirmação de senha' />
+                                <input 
+                                    className='confirm-password form-control w-100'
+                                    type='password'
+                                    placeholder='Confirme a Senha'
+                                    value={confirmNewPassword}
+                                    onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                />
+                            </div>
                         </div>
-                        <div className='input d-flex align-items-center m-auto rounded w-100 px-2'>
-                            <img src={passwordIcon} alt='Ícone de confirmação de senha' />
-                            <input 
-                                className='confirm-password form-control w-100'
-                                type='password'
-                                placeholder='Confirme a Senha'
-                                value={confirmNewPassword}
-                                onChange={(e) => setConfirmNewPassword(e.target.value)}
-                            />
+                        <div className='submit-container d-flex '>
+                            <div className='submit w-100' onClick={handleSubmitChangePassword}>
+                                Redefinir Senha
+                            </div>
                         </div>
-                    </div>
-                    <div className='submit-container d-flex '>
-                        <div className='submit w-100' onClick={handleSubmitChangePassword}>
-                            Redefinir Senha
-                        </div>
-                    </div>
-                </>
-            )}
+                    </>
+                )}
 
-            <div className='forgot-password fs-6 my-3 text-secondary'>
-                Retornar ao Login?<Link to={'/login'}> <span>Clique aqui</span></Link>
+                <div className='forgot-password fs-6 my-3 text-secondary'>
+                    Retornar ao Login?<Link to={'/login'}> <span>Clique aqui</span></Link>
+                </div>
             </div>
         </div>
     );

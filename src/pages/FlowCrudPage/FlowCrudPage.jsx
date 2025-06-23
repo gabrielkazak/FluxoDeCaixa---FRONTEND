@@ -9,7 +9,7 @@ const FlowCrudPage = () => {
     const [loadingFlows, setLoadingFlows] = useState(false);
     const [errorFlows, setErrorFlows] = useState(null);
 
-    const [action, setAction] = useState('SeeAll'); // SeeAll e Update
+    const [action, setAction] = useState('SeeAll'); 
 
     const [flowId, setFlowID] = useState('')
     const [id, setId] = useState('');
@@ -21,7 +21,7 @@ const FlowCrudPage = () => {
 
     const fetchBalance = useCallback(async () => {
         try {
-            const accessToken = sessionStorage.getItem('accessToken');
+            const accessToken = localStorage.getItem('accessToken');
 
             const balanceAPI = await fetch('/api/balance', {
                 method: 'GET',
@@ -45,7 +45,7 @@ const FlowCrudPage = () => {
     const handleFetchFlows = useCallback(async () => {
         setLoadingFlows(true);
         setErrorFlows(null);
-        const accessToken = sessionStorage.getItem('accessToken');
+        const accessToken = localStorage.getItem('accessToken');
 
         if (!accessToken) {
             navigate('/login');
@@ -97,7 +97,7 @@ const FlowCrudPage = () => {
     const handleUpdateFlow = useCallback(async (e) => {
         e.preventDefault();
 
-        const accessToken = sessionStorage.getItem('accessToken');
+        const accessToken = localStorage.getItem('accessToken');
 
         const flowData = {
             idUsuario: Number(id),
@@ -108,10 +108,6 @@ const FlowCrudPage = () => {
             dataMovimentacao: new Date().toISOString(),
             descricao,
         };
-
-        console.log('dados enviados', flowData)
-        console.log('id da movimentação', flowId)
-        console.log(`enviado dados para /api/flows/${flowId}`)
 
         try {
             const response = await fetch(`/api/flows/${flowId}`, {
@@ -159,15 +155,20 @@ const FlowCrudPage = () => {
 
     return (
         <>
-            <div className="d-flex flex-column min-vh-100 bg-light">
-                <header className="navbar navbar-expand-lg navbar-dark bg-success shadow-sm p-3">
-                    <div className="container-fluid">
-                        <button className="btn btn-success btn-lg border">
-                            <a className="btn-flowPage" href="/allFlows">
-                                Ver Movimentações
+            <div className="d-flex flex-column min-vh-100 min-vw-75 bg-light">
+                <header className="navbar navbar-expand-lg navbar-dark shadow-sm p-3">
+                    <div className="container-fluid d-flex flex-column flex-md-row justify-content-center align-items-center justify-content-md-around align-items-center">
+                        <button className="btn btn-primary btn-lg border">
+                            <a className="btn-flowPage" href="/filter">
+                                Filtrar Movimentações
                             </a>
                         </button>
-                        <button className="btn btn-success btn-lg border">
+                        <button className="btn btn-primary btn-lg border">
+                            <a className="btn-flowPage" href="/flowPage">
+                                Criar Movimentação
+                            </a>
+                        </button>
+                        <button className="btn btn-primary btn-lg border my-3">
                             <a className="btn-flowPage" href="/dashboard">
                                 Voltar a Dashboard
                             </a>
@@ -177,14 +178,13 @@ const FlowCrudPage = () => {
 
                 <main className="flex-grow-1 p-3 p-md-4">
                     <div className="container-fluid py-4 bg-white rounded shadow-sm">
-                        <h2 className="text-center text-success mb-4 display-6">Bem-vindo(a) a aba de movimentação</h2>
                         {balance && (
                             <div className="d-flex justify-content-between">
                                 <p className="lead text-center mb-4">
-                                    Saldo na conta <strong>R${balance.saldoConta}</strong>
+                                    Saldo na conta <strong className='fw-bold'>R${balance.saldoConta}</strong>
                                 </p>
                                 <p className="lead text-center mb-4">
-                                    Saldo no caixa <strong>R${balance.saldoCaixa}</strong>
+                                    Saldo no caixa <strong className='fw-bold'>R${balance.saldoCaixa}</strong>
                                 </p>
                             </div>
                         )}
@@ -192,9 +192,9 @@ const FlowCrudPage = () => {
                         {action === 'SeeAll' && (
                             <div className="row g-4">
                                 <div className="col-12 text-center">
-                                    <div className="card h-100 border-success shadow-sm">
-                                        <div className="card-body bg-light-green-subtle">
-                                            <h3 className="card-title text-success mb-3">Movimentações Recentes</h3>
+                                    <div className="card border shadow-sm ms-5 me-5">
+                                        <div className="card-body bg-light-green-subtle px-5 mx-5">
+                                            <h3 className="card-title text-primary mb-3">Todas as Movimentações no Sistema</h3>
                                             {loadingFlows && <p>Carregando movimentações...</p>}
                                             {errorFlows && <p className="text-danger">Erro: {errorFlows}</p>}
                                             {flows.length > 0 ? (
@@ -231,7 +231,7 @@ const FlowCrudPage = () => {
                                                                 <div className="d-flex justify-content-center">
                                                                     <button
                                                                         className="btn btn-secondary btn-sm"
-                                                                        onClick={() => handleEditClick(flow)} // Call handleEditClick with the flow data
+                                                                        onClick={() => handleEditClick(flow)}
                                                                     >
                                                                         &#x270E; Editar
                                                                     </button>
@@ -251,9 +251,9 @@ const FlowCrudPage = () => {
                         {action === 'Update' && (
                             <div className="row g-4">
                                 <div className="col-12 text-center">
-                                    <div className="card h-100 border-success shadow-sm">
+                                    <div className="card h-100 border-primary shadow-sm">
                                         <div className="card-body bg-light-green-subtle">
-                                            <h3 className="card-title text-success mb-3">Atualizar Movimentação de Caixa</h3>
+                                            <h3 className="card-title fw-bold mb-3">Atualizar Movimentação de Caixa</h3>
 
                                             <form onSubmit={handleUpdateFlow}>
                                                 <div className="mb-3 text-start">
@@ -336,7 +336,7 @@ const FlowCrudPage = () => {
                                                     />
                                                 </div>
 
-                                                <button type="submit" className="btn btn-success">
+                                                <button type="submit" className="btn btn-primary">
                                                     Salvar Movimentação
                                                 </button>
                                             </form>
@@ -347,10 +347,6 @@ const FlowCrudPage = () => {
                         )}
                     </div>
                 </main>
-
-                <footer className="bg-dark text-white text-center py-3 shadow-top">
-                    <p className="mb-0">&copy; 2025 Meu App. Todos os direitos reservados.</p>
-                </footer>
             </div>
         </>
     );
