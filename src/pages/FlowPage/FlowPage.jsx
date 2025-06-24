@@ -98,6 +98,19 @@ const FlowPage = () => {
     [id, tipo, classificacao, valor, formaPagamento, descricao]
   );
 
+  const classificacoes = [
+    { label: 'Venda', tipo: 'Entrada' },
+    { label: 'PrestacaoServico', tipo: 'Entrada' },
+    { label: 'Compra', tipo: 'Saida' },
+    { label: 'Investimento', tipo: 'Saida' },
+    { label: 'GastoFixo', tipo: 'Saida' }
+  ];
+
+  const classificacoesFiltradas = classificacoes.filter(
+    (item) => item.tipo === tipo
+  );
+
+
   return (
     <>
       <div className='d-flex flex-column min-vh-100 bg-light'>
@@ -158,7 +171,7 @@ const FlowPage = () => {
                         </select>
                       </div>
 
-                      <div className='mb-3 text-start'>
+                     <div className='mb-3 text-start'>
                         <label htmlFor='classificacao' className='form-label'>
                           Classificação
                         </label>
@@ -167,17 +180,21 @@ const FlowPage = () => {
                           className='form-select'
                           value={classificacao}
                           onChange={(e) => setClassificacao(e.target.value)}
+                          disabled={!tipo}
                         >
                           <option value=''>Selecione</option>
-                          <option value='Venda'>Venda</option>
-                          <option value='Compra'>Compra</option>
-                          <option value='Investimento'>Investimento</option>
-                          <option value='PrestacaoServico'>
-                            Prestação de Serviço
-                          </option>
-                          <option value='GastoFixo'>Gasto Fixo</option>
+                          {classificacoesFiltradas.map((item) => (
+                            <option key={item.label} value={item.label}>
+                              {item.label === 'PrestacaoServico'
+                                ? 'Prestação de Serviço'
+                                : item.label === 'GastoFixo'
+                                ? 'Gasto Fixo'
+                                : item.label}
+                            </option>
+                          ))}
                         </select>
                       </div>
+
 
                       <div className='mb-3 text-start'>
                         <label htmlFor='valor' className='form-label'>

@@ -119,6 +119,8 @@ const FilterFlowsPage = () => {
     fetchFlows();
   }, [params, filter, fetchFlows]);
 
+  const role = localStorage.getItem('userRole');
+
   return (
     <>
       <div className='d-flex flex-column min-vh-100 min-vw-75 bg-light'>
@@ -182,7 +184,9 @@ const FilterFlowsPage = () => {
                           Selecione o filtro
                         </option>
                         <option value='Data'>Data</option>
+                        {role === 'admin' && 
                         <option value='Usuario'>Usuário</option>
+                        }
                       </select>
                     </div>
 

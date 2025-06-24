@@ -1,10 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Chart from 'chart.js/auto';
 import './FlowCrudPage.css';
+
+let chartInstance = null;
+
 
 const FlowCrudPage = () => {
   const navigate = useNavigate();
   const [balance, setBalance] = useState('');
+  const [chartBalance, setChartBalance] = useState([])
   const [flows, setFlows] = useState([]);
   const [loadingFlows, setLoadingFlows] = useState(false);
   const [errorFlows, setErrorFlows] = useState(null);
@@ -39,6 +44,25 @@ const FlowCrudPage = () => {
       setBalance(data);
     } catch (error) {
       console.error('Erro na requisição:', error);
+    }
+  }, []);
+
+  const fetchBalanceForChart = useCallback(async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+
+      const chartApi = await fetch('api/balance/all', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const data = await chartApi.json()
+      setChartBalance(data)
+    } catch (error) {
+      console.error('Erro ao buscar o historico de saldo',error)
     }
   }, []);
 
@@ -91,6 +115,10 @@ const FlowCrudPage = () => {
   useEffect(() => {
     fetchBalance();
   }, [fetchBalance]);
+
+  useEffect(() => {
+    fetchBalanceForChart()
+  }, [fetchBalanceForChart])
 
   useEffect(() => {
     const storedID = localStorage.getItem('id');
@@ -170,6 +198,91 @@ const FlowCrudPage = () => {
     setAction('Update');
   };
 
+  const handleChartBuild = (chartBalance) => {
+    const data = chartBalance.map(item => new Date(item.data).toLocaleDateString('pt-BR'));
+
+    const saldoConta = chartBalance.map(item => item.saldoConta);
+    const saldoCaixa = chartBalance.map(item => item.saldoCaixa);
+
+    const ctx = document.getElementById('fluxoCaixaChart').getContext('2d');
+
+    if (chartInstance) {
+      chartInstance.destroy();
+    }
+
+    chartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: data,
+        datasets: [
+          {
+            label: 'Saldo na Conta',
+            data: saldoConta,
+            borderColor: 'blue',
+            backgroundColor: 'rgba(0, 0, 255, 0.1)',
+          },
+          {
+            label: 'Saldo no Caixa',
+            data: saldoCaixa,
+            borderColor: 'green',
+            backgroundColor: 'rgba(0, 255, 0, 0.1)',
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Fluxo de Caixa em Tempo Real'
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false
+          }
+        },
+        interaction: {
+          mode: 'nearest',
+          intersect: false
+        },
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Data'
+            }
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Valor (R$)'
+            }
+          }
+        }
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (chartBalance.length > 0) {
+      handleChartBuild(chartBalance);
+    }
+  }, [chartBalance]);
+
+  const classificacoes = [
+    { label: 'Venda', tipo: 'Entrada' },
+    { label: 'PrestacaoServico', tipo: 'Entrada' },
+    { label: 'Compra', tipo: 'Saida' },
+    { label: 'Investimento', tipo: 'Saida' },
+    { label: 'GastoFixo', tipo: 'Saida' }
+  ];
+
+  const classificacoesFiltradas = classificacoes.filter(
+    (item) => item.tipo === tipo
+  );
+
   return (
     <>
       <div className='d-flex flex-column min-vh-100 min-vw-75 bg-light'>
@@ -220,6 +333,7 @@ const FlowCrudPage = () => {
                       {errorFlows && (
                         <p className='text-danger'>Erro: {errorFlows}</p>
                       )}
+                      <canvas id="fluxoCaixaChart" width="800" height="400"></canvas>
                       {flows.length > 0 ? (
                         <ul className='list-group list-group-flush'>
                           {flows.map((flow) => (
@@ -314,14 +428,16 @@ const FlowCrudPage = () => {
                             onChange={(e) => setClassificacao(e.target.value)}
                           >
                             <option value=''>Selecione</option>
-                            <option value='Venda'>Venda</option>
-                            <option value='Compra'>Compra</option>
-                            <option value='Investimento'>Investimento</option>
-                            <option value='PrestacaoServico'>
-                              Prestação de Serviço
+                          {classificacoesFiltradas.map((item) => (
+                            <option key={item.label} value={item.label}>
+                              {item.label === 'PrestacaoServico'
+                                ? 'Prestação de Serviço'
+                                : item.label === 'GastoFixo'
+                                ? 'Gasto Fixo'
+                                : item.label}
                             </option>
-                            <option value='GastoFixo'>Gasto Fixo</option>
-                          </select>
+                          ))}
+                        </select>
                         </div>
 
                         <div className='mb-3 text-start'>
