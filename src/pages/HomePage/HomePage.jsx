@@ -199,7 +199,8 @@ const HomePage = () => {
     handleFetchFlows();
   }, [handleFetchFlows]);
 
-  console.log(userRole);
+  const loggedUserId = Number(localStorage.getItem('id'));
+  const role = localStorage.getItem('userRole')
 
   return (
     <div className='min-vw-75 d-flex flex-column bg-light'>
@@ -211,11 +212,11 @@ const HomePage = () => {
               Fazer Movimentação
             </Link>
           </button>
-          <button className='btn btn-primary btn-lg border'>
+          {role === 'admin' && <button className='btn btn-primary btn-lg border'>
             <Link className='btn-flowPage' to='/register'>
               Criar Usuário
             </Link>
-          </button>
+          </button>}
           <button className='btn btn-danger btn-lg my-3' onClick={handleLogout}>
             Deslogar
           </button>
@@ -301,12 +302,14 @@ const HomePage = () => {
                               >
                                 ✏️ Editar
                               </button>
-                              <button
-                                className='btn btn-danger btn-sm'
-                                onClick={() => handleDeleteUser(user.id)}
-                              >
-                                🗑 Excluir
-                              </button>
+                              {user.id !== loggedUserId && (
+                                <button
+                                  className='btn btn-danger btn-sm'
+                                  onClick={() => handleDeleteUser(user.id)}
+                                >
+                                  🗑 Excluir
+                                </button>
+                              )}
                             </div>
                           </li>
                         ))}
