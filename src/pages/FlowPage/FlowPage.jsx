@@ -13,6 +13,8 @@ const FlowPage = () => {
   const [formaPagamento, setFormaPagamento] = useState('');
   const [descricao, setDescricao] = useState('');
   const [balance, setBalance] = useState('');
+  const [caixaFixed, setCaixaFixed] = useState('')
+  const [contaFixed, setContaFixed] = useState('')
 
   const fetchBalance = async () => {
     try {
@@ -40,6 +42,13 @@ const FlowPage = () => {
   useEffect(() => {
     fetchBalance();
   }, []);
+
+  useEffect(() => {
+    if (balance?.saldoCaixa != null && balance?.saldoConta != null) {
+      setCaixaFixed(String(parseFloat(balance.saldoCaixa).toFixed(2)).replace('.', ','));
+      setContaFixed(String(parseFloat(balance.saldoConta).toFixed(2)).replace('.', ','));
+    }
+  }, [balance]);
 
   useEffect(() => {
     const storedID = localStorage.getItem('id');
@@ -134,13 +143,13 @@ const FlowPage = () => {
             {balance && (
               <>
                 <div className='d-flex justify-content-between'>
-                  <p className='lead text-center mb-4'>
+                  <p className='lead text-center mb-4 pe-1'>
                     Saldo na conta{' '}
-                    <strong className='fw-bold'>R${balance.saldoConta}</strong>
+                    <strong className='fw-bold'>R${contaFixed}</strong>
                   </p>
-                  <p className='lead text-center mb-4'>
+                  <p className='lead text-center mb-4 ps-1'>
                     Saldo no caixa{' '}
-                    <strong className='fw-bold'>R${balance.saldoCaixa}</strong>
+                    <strong className='fw-bold'>R${caixaFixed}</strong>
                   </p>
                 </div>
               </>
