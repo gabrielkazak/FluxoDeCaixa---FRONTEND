@@ -1,3 +1,40 @@
 .navbar{
     background-color: #014F91 !important;
 }
+
+.flowImage{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    padding: 3px;
+
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  aspect-ratio: 2 / 1;
+}
+
+#fluxoCaixaChart {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 576px) {
+  .chart-container {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .card-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+}
+
+
+

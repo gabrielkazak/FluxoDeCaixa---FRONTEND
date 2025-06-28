@@ -225,7 +225,7 @@ const HomePage = () => {
 
       <main className='flex-grow-1 p-3 p-md-4'>
         <div className='container-fluid py-4 bg-white rounded shadow-sm'>
-          <h2 className='text-center fw-bold mb-4 display-6'>
+          <h2 className='text-center fw-bold mb-4 display-6 text-primary'>
             Bem-vindo(a) ao seu Dashboard {userName}!
           </h2>
           <p className='lead text-center mb-4'>
@@ -251,7 +251,7 @@ const HomePage = () => {
                         {flows.map((flow) => (
                           <li key={flow.id} className='list-group-item'>
                             <strong>{flow.tipo}</strong> - {flow.classificacao}{' '}
-                            R${flow.valor}
+                            R${String(parseFloat(flow.valor).toFixed(2).replace('.', ','))}
                           </li>
                         ))}
                       </ul>
