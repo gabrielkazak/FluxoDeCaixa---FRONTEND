@@ -1,0 +1,18 @@
+FROM node:20
+
+WORKDIR /app
+
+# Copia os arquivos de definição de dependências (package.json e package-lock.json)
+COPY package.json package-lock.json ./
+
+ENV NODE_ENV=development
+
+# Instala todas as dependências, incluindo as de desenvolvimento (onde o Vite geralmente está)
+RUN npm install --include=dev
+
+# Agora sim, copia o restante dos arquivos da aplicação
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host"]
