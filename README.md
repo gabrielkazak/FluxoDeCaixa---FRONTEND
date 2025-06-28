@@ -1,4 +1,4 @@
-# Sistema de Fluxo de Caixa (Frontend)
+# 📈🖼️ Sistema de Fluxo de Caixa (Frontend)
 
 ## Descrição
 
@@ -20,6 +20,31 @@ Parte frontend do sistema de fluxo de caixa para uma pequena empresa. Esta inter
 ## Pré-requisitos
 
 - Node.js instalado
+
+## Arquitetura
+
+- 📦 fluxoCaixa (raiz do projeto frontend)
+- ├── 📁 public
+- ├── 📁 src
+- │   ├── 📁 Components
+- │   │   └── 📁 assets
+- │   ├── 📁 pages
+- │   │   ├── 📁 FilterFlowsPage
+- │   │   ├── 📁 FlowCrudPage
+- │   │   ├── 📁 FlowPage
+- │   │   ├── 📁 HomePage
+- │   │   ├── 📁 LoginPage
+- │   │   ├── 📁 RecPasswordPage
+- │   │   ├── 📁 RegisterPage
+- │   │   └── 📁 UpdateUserPage
+- │   ├── 📁 services
+- │   ├── 📄 App.css
+- │   ├── 📄 App.jsx
+- │   ├── 📄 index.css
+- │   └── 📄 main.jsx
+- ├── 📄 index.html
+- ├── 📄 package.json
+
 
 ## Instalação
 
