@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './LoginPage.css';
 import password from '../../Components/assets/password.png';
 import email from '../../Components/assets/email.png';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
-  const navigate = useNavigate();
   const [emailTxt, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
@@ -30,7 +29,7 @@ const LoginPage = () => {
         localStorage.setItem('userName', result.user.name);
         localStorage.setItem('userRole', result.user.role);
         localStorage.setItem('accessToken', result.accessToken);
-        navigate('/dashboard');
+        window.location.href = '/dashboard';
       } else {
         alert(result.message || 'Erro no login.');
       }
@@ -38,6 +37,23 @@ const LoginPage = () => {
       alert('Erro na requisição.', error);
     }
   };
+
+  const checkFirstUser = async () => {
+    const res = await fetch('api/users/test');
+    const data = await res.json();
+
+    if (!data.exists) {
+      localStorage.setItem('firstUser', 'firstUser');
+      window.location.href = '/register';
+    }
+  };
+  
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+     if (!token) {
+      checkFirstUser();
+    }
+  },[])
 
   return (
     <div className='corpo'>
