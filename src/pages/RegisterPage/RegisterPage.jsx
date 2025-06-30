@@ -8,9 +8,15 @@ import { Link, useNavigate } from 'react-router-dom';
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [nome, setNome] = useState('');
-  const [funcao, setFuncao] = useState('');
+  const [funcao, setFuncao] = useState(localStorage.getItem('firstUser') ? 'admin' : '');
   const [emailTxt, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+
+  const firstAccess = localStorage.getItem('firstUser')
+
+  if (firstAccess) {
+    if (funcao !== 'admin') setFuncao('admin');
+  }
 
   const handleRegister = async () => {
     if (!nome.trim() || !funcao || !emailTxt.trim() || !senha.trim()) {
@@ -19,7 +25,10 @@ const RegisterPage = () => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
+      let token = localStorage.getItem('accessToken');
+      if (!token) {
+        token = localStorage.getItem('firstUser')
+      }
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
@@ -38,6 +47,7 @@ const RegisterPage = () => {
 
       if (response.ok) {
         alert('Cadastro realizado com sucesso!');
+        localStorage.removeItem('firstUser');
         navigate('/dashboard');
       } else {
         alert(result.message || 'Erro no cadastro.');
@@ -79,6 +89,7 @@ const RegisterPage = () => {
               className='form-select border-0 bg-transparent p-0'
               value={funcao}
               onChange={(e) => setFuncao(e.target.value)}
+              disabled={!!firstAccess} // <-- desativa se for primeiro acesso
               style={{ fontSize: '19px', color: '#797979', width: '100%' }}
             >
               <option value='' disabled>

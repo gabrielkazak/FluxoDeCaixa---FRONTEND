@@ -19,7 +19,7 @@ import FlowCrudPage from './pages/FlowCrudPage/FlowCrudPage';
 import FilterFlowsPage from './pages/FilterFlowsPage/FilterFlowsPage';
 
 const App = () => {
-  const isAuthenticated = true;
+  const isAuthenticated = !!localStorage.getItem('accessToken');
   useTokenRefresher();
 
   return (
