@@ -4,6 +4,8 @@ import emailIcon from '../../Components/assets/email.png';
 import passwordIcon from '../../Components/assets/password.png';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const RecPasswordPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ const RecPasswordPage = () => {
     setFeedbackMessage('Enviando e-mail...');
 
     try {
-      const response = await fetch('/api/auth/forgot-password', {
+      const response = await fetch(`${apiUrl}/api/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +88,7 @@ const RecPasswordPage = () => {
     setFeedbackMessage('Redefinindo senha...');
 
     try {
-      const response = await fetch(`/api/auth/reset-password?token=${token}`, {
+      const response = await fetch(`${apiUrl}/api/auth/reset-password?token=${token}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

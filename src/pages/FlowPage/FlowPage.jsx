@@ -3,6 +3,8 @@ import './FlowPage.css';
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const FlowPage = () => {
   const navigate = useNavigate();
 
@@ -20,7 +22,7 @@ const FlowPage = () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
 
-      const balanceAPI = await fetch('/api/balance', {
+      const balanceAPI = await fetch(`${apiUrl}/api/balance`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +78,7 @@ const FlowPage = () => {
       };
 
       try {
-        const response = await fetch('/api/flows', {
+        const response = await fetch(`${apiUrl}/api/flows`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

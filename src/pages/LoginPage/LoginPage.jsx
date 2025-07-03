@@ -4,6 +4,8 @@ import password from '../../Components/assets/password.png';
 import email from '../../Components/assets/email.png';
 import { Link } from 'react-router-dom';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const LoginPage = () => {
   const [emailTxt, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -15,7 +17,7 @@ const LoginPage = () => {
     }
 
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(`${apiUrl}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: emailTxt, password: senha }),
@@ -39,7 +41,7 @@ const LoginPage = () => {
   };
 
   const checkFirstUser = async () => {
-    const res = await fetch('api/users/test');
+    const res = await fetch(`${apiUrl}/api/users/test`);
     const data = await res.json();
 
     if (!data.exists) {

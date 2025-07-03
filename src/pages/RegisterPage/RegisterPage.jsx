@@ -5,6 +5,8 @@ import password from '../../Components/assets/password.png';
 import email from '../../Components/assets/email.png';
 import { Link, useNavigate } from 'react-router-dom';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [nome, setNome] = useState('');
@@ -29,7 +31,7 @@ const RegisterPage = () => {
       if (!token) {
         token = localStorage.getItem('firstUser')
       }
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch(`${apiUrl}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

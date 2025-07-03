@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import flowIn from '../../Components/assets/flowIn.png';
 import flowOut from '../../Components/assets/flowOut.png';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const FilterFlowsPage = () => {
   const navigate = useNavigate();
 
@@ -35,7 +37,7 @@ const FilterFlowsPage = () => {
     }
 
     try {
-      const response = await fetch('/api/users', {
+      const response = await fetch(`${apiUrl}/api/users`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +68,7 @@ const FilterFlowsPage = () => {
   const fetchBalance = useCallback(async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      const balanceAPI = await fetch('/api/balance', {
+      const balanceAPI = await fetch(`${apiUrl}/api/balance`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -94,9 +96,9 @@ const FilterFlowsPage = () => {
 
       if (filter === 'Data') {
         console.log(params);
-        endpoint = `/api/flows/data/${params}`;
+        endpoint = `${apiUrl}/api/flows/data/${params}`;
       } else if (filter === 'Usuario') {
-        endpoint = `/api/flows/user/${params}`;
+        endpoint = `${apiUrl}/api/flows/user/${params}`;
       } else {
         return;
       }
