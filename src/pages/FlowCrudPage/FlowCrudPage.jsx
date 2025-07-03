@@ -5,6 +5,8 @@ import './FlowCrudPage.css';
 import flowIn from '../../Components/assets/flowIn.png';
 import flowOut from '../../Components/assets/flowOut.png';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 let chartInstance = null;
 
 const FlowCrudPage = () => {
@@ -44,7 +46,7 @@ const FlowCrudPage = () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
 
-      const balanceAPI = await fetch('/api/balance', {
+      const balanceAPI = await fetch(`${apiUrl}/api/balance`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +69,7 @@ const FlowCrudPage = () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
 
-      const chartApi = await fetch('api/balance/all', {
+      const chartApi = await fetch(`${apiUrl}api/balance/all`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +95,7 @@ const FlowCrudPage = () => {
     }
 
     try {
-      const response = await fetch('/api/flows/all', {
+      const response = await fetch(`${apiUrl}/api/flows/all`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -171,7 +173,7 @@ const FlowCrudPage = () => {
       };
 
       try {
-        const response = await fetch(`/api/flows/${flowId}`, {
+        const response = await fetch(`${apiUrl}/api/flows/${flowId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

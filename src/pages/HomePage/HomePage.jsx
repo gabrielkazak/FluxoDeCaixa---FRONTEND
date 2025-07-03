@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../Components/assets/logo.png';
 import './HomePage.css';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const HomePage = () => {
   const navigate = useNavigate();
 
@@ -36,7 +38,7 @@ const HomePage = () => {
     localStorage.removeItem('id');
 
     try {
-      const response = await fetch('/api/auth/logout', {
+      const response = await fetch(`${apiUrl}//api/auth/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +79,7 @@ const HomePage = () => {
     }
 
     try {
-      const response = await fetch('/api/users', {
+      const response = await fetch(`${apiUrl}/api/users`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
