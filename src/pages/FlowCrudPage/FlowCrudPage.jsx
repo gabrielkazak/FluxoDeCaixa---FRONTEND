@@ -69,7 +69,7 @@ const FlowCrudPage = () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
 
-      const chartApi = await fetch(`${apiUrl}api/balance/all`, {
+      const chartApi = await fetch(`${apiUrl}/api/balance/all`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
