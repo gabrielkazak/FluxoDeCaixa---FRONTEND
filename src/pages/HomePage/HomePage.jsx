@@ -122,7 +122,7 @@ const HomePage = () => {
     }
 
     try {
-      const response = await fetch('/api/flows/all', {
+      const response = await fetch(`${apiUrl}/api/flows/all`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -163,7 +163,7 @@ const HomePage = () => {
       const accessToken = localStorage.getItem('accessToken');
 
       try {
-        const response = await fetch(`/api/users/${id}`, {
+        const response = await fetch(`${apiUrl}/api/users/${id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
